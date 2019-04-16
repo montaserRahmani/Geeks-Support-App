@@ -1,0 +1,85 @@
+<div id="onboarding-form" class="p-30 m-30 brad-5 white-bg" style="position: relative;">
+
+    <div style="position: absolute; top: 0; right: 0; padding: 5px">
+        <button mat-button (click)="resetSteps()">Reset</button>
+    </div>
+
+  <div fxLayout="column" class="mt-20">
+      <h3 class="m-0 p-15 w-100p grey-200-bg">Activating Geeks Platform</h3>
+
+  </div>
+
+    <div fxLayout="column" fxLayoutAlign="center center" [@fadeIn] *ngIf="steps.step1.current">
+        <div fxLayout="row" fxLayoutAlign="start center" class="mt-20" fxFill>
+            <i class="fa fa-chevron-circle-right font-size-30 green-fg h-30 w-30 mr-15"></i>
+            <h2 class="m-0">Download Geeks Monitoring App</h2>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" class="mt-5 ml-45" fxFill>
+            <i class="icon icon-information-outline font-size-20 h-20 w-20 mr-5" style="color: #4a7488;"></i>
+            <h4 style="color: #4a7488;">A file will be downloaded and executed automatically</h4>
+        </div>
+        
+        <div fxLayout="column" fxLayoutAlign="center center" class="mv-25 w-300 " [@fadeIn] *ngIf="steps.step1.downloading">
+            <span class="m-10" [@fadeIn] *ngIf="!isMacOs">{{steps.step1.downloadProgress.toFixed(0)}}%</span>
+            <span class="m-10" [@fadeIn] *ngIf="isMacOs">Downloading ..</span>
+            <mat-progress-bar mode="{{ isMacOs ? 'indeterminate' : 'determinate' }}" value="{{steps.step1.downloadProgress}}"></mat-progress-bar>
+        </div>
+
+        <div fxLayout="column" fxLayoutAlign="center center" class="mv-25 w-300 " [@fadeIn] *ngIf="steps.step1.downloaded">
+            <i class="fa fa-check-circle green-fg font-size-60 h-60 w-60 m-20" style="color: #4a7488;"></i>
+            <span>File downloaded successfully</span>
+        </div>
+        
+        <div fxLayout="column" fxLayoutAlign="center center" class="mv-25 " [@fadeIn] [hidden]="steps.step1.downloading || steps.step1.downloaded || steps.step1.downloadFailed" fxFill>
+            <span class="mb-25 red-fg" [@fadeIn] *ngIf="fileNotFound">Downloaded file is not found please try again.</span>
+            <span class="mb-25 red-fg" [@fadeIn] *ngIf="steps.step1.downloadFailed">Cannot donwload file please try again.</span>
+            <button class="login-button w-300 ph-15" type="submit" (click)="downloadAgent()">
+                <i matPrefix class="fab fa-windows mr-5 font-size-20 h-20 w-20 white-fg"></i> Download Software
+            </button>
+        </div>
+    </div>
+
+      <div fxLayout="column" fxLayoutAlign="center center" *ngIf="steps.step2.current">
+            <div fxLayout="row" fxLayoutAlign="start center" class="mt-20" fxFill>
+                <i class="fa fa-chevron-circle-right font-size-30 green-fg h-30 w-30 mr-15"></i>
+                <h2 class="m-0">Installing application</h2>
+            </div>
+        
+            <div fxLayout="row" fxLayoutAlign="start center" class="mt-5 ml-45" fxFill>
+                <i class="icon icon-information-outline font-size-20 h-20 w-20 mr-5" style="color: #4a7488;"></i>
+                <h4 style="color: #4a7488;" [hidden]="isMacOs">You will be prompted to install the application, please proceed with the installation wizard</h4>
+                <h4 style="color: #4a7488;" [hidden]="!isMacOs">You will be prompted to enter your password to complete the installation</h4>
+            </div>
+        
+            <div fxLayout="column" fxLayoutAlign="center center" class="mv-25 w-300 " [@fadeIn]  *ngIf="steps.step2.loadingInstaller">
+                <span class="m-10">Running installer ..</span>
+                <mat-spinner diameter="35" color="orange"></mat-spinner>
+            </div>
+
+            <div fxLayout="column" fxLayoutAlign="center center" class="mv-25 w-300 " [@fadeIn]  *ngIf="steps.step2.checkingAgent">
+                <span class="m-10">Checking installation..</span>
+                <mat-spinner diameter="35" color="orange"></mat-spinner>
+            </div>
+    
+            <div fxLayout="column" fxLayoutAlign="center center" class="mv-25 w-300 " [@fadeIn]  *ngIf="steps.step2.agentInstalled">
+                <i class="fa fa-check-circle green-fg font-size-60 h-60 w-60 m-20" style="color: #4a7488;"></i>
+                <span>Application installed successfully</span>
+                <button class="login-button w-300 ph-15 mt-20" type="submit" (click)="hideWindow()">
+                    Continue
+                </button>
+            </div>
+                <!-- <i class="icon icon-windows font-size-80 h-80 w-80 mb-10" ng-if="!vm.OSVersion"></i> -->
+                <!-- <i class="icon icon-apple font-size-80 h-80 w-80 mb-10" ng-if="vm.OSVersion"></i> -->
+        
+            <div fxLayout="column" fxLayoutAlign="center center" class="mv-25" [@fadeIn] *ngIf="steps.step2.installFailed" fxFill>
+                <span class="mv-5 red-fg">Application installation failed</span>
+                <span class="mv-5 font-size-12" [hidden]="!steps.step2.permissionNotGranted">Permission error: please enter your password so we can install the app</span>
+                <button class="login-button w-300 ph-15 mt-25" type="submit" (click)="runAgent()">
+                    <i matPrefix class="fab fa-windows mr-5 font-size-20 h-20 w-20 white-fg"></i> Run installer again
+                </button>
+            </div>
+          </div>
+
+
+</div>
